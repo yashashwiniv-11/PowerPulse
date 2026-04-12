@@ -40,7 +40,9 @@ PowerCut Alert System is a simple and practical web application built to help us
 
 
 ## Live Demo
-Will be added after deployment  
+
+Check out the live project here:  
+https://powerpulse-yashashwini.netlify.app/
 
 
 ## Author
