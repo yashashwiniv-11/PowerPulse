@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PowerCut Alert</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>PowerCut Alert</h1>
+
+        <input type="text" id="areaInput" placeholder="Enter your area">
+
+        <div class="buttons">
+            <button onclick="reportCut()">Report Cut</button>
+            <button onclick="powerBack()">Power Restored</button>
+            <button onclick="clearAll()">Clear All</button>
+        </div>
+
+        <div class="dashboard">
+            <div class="card">
+                <h3>Total Reports</h3>
+                <p id="totalReports">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Active Cuts</h3>
+                <p id="activeCuts">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Avg Restore Time</h3>
+                <p id="avgTime">0 mins</p>
+            </div>
+        </div>
+
+        <h2>Live Updates</h2>
+        <div id="reportList"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
