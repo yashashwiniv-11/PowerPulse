@@ -22,7 +22,7 @@ PowerCut Alert System is a simple and practical web application built to help us
 - localStorage for storing data in the browser  
 
 
-## 📷 How It Works
+## How It Works
 1. Enter your area name  
 2. Click on "Report Cut" when the power goes off  
 3. Click on "Power Restored" when electricity comes back  
