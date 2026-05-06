@@ -1,0 +1,24 @@
+[
+  {
+    "area": "Hyderabad",
+    "status": "Power Cut",
+    "time": "5/5/2026, 12:08:37 pm"
+  },
+  {
+    "area": "Nagar Kurnool",
+    "status": "Power Restored",
+    "time": "5/5/2026, 12:08:22 pm"
+  },
+  {
+    "id": 1777654184384,
+    "area": "nagar kurnool",
+    "status": "Power Cut",
+    "time": "1/5/2026, 10:19:44 pm"
+  },
+  {
+    "id": 1777654180595,
+    "area": "nagar kurnool",
+    "status": "Power Restored",
+    "time": "1/5/2026, 10:19:40 pm"
+  }
+]

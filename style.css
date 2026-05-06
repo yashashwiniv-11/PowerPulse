@@ -1,85 +1,53 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #0f172a;
-    color: #ffffff;
-    text-align: center;
+  font-family: Arial;
+  text-align: center;
+  background: #0f172a;
+  color: white;
+}
+
+h1 {
+  margin-top: 20px;
 }
 
 .container {
-    margin-top: 60px;
+  margin: 20px auto;
+  width: 80%;
 }
 
 input {
-    width: 260px;
-    padding: 10px;
-    border-radius: 6px;
-    border: none;
-    margin: 10px;
-    outline: none;
+  padding: 10px;
+  width: 250px;
+  margin-bottom: 10px;
 }
 
 .buttons button {
-    margin: 8px;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-.buttons button:nth-child(1) {
-    background-color: #ef4444;
-    color: white;
-}
-
-.buttons button:nth-child(2) {
-    background-color: #22c55e;
-    color: white;
-}
-
-.buttons button:nth-child(3) {
-    background-color: #64748b;
-    color: white;
-}
-
-.dashboard {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin: 20px;
-}
-
-.card {
-    background-color: #1e293b;
-    padding: 15px;
-    width: 160px;
-    border-radius: 8px;
-}
-
-.report-card {
-    background-color: #1e293b;
-    width: 340px;
-    margin: 12px auto;
-    padding: 15px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  border-radius: 5px;
 }
 
 .cut {
-    border-left: 5px solid #ef4444;
+  background: red;
 }
 
-.restored {
-    border-left: 5px solid #22c55e;
+.restore {
+  background: green;
 }
 
-.delete-btn {
-    background-color: #ef4444;
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 5px;
-    cursor: pointer;
+.clear {
+  background: gray;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid white;
 }

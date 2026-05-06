@@ -1,149 +1,70 @@
-const reportList = document.getElementById("reportList");
-const areaInput = document.getElementById("areaInput");
+const API = "http://localhost:5000";
 
-let reports = JSON.parse(localStorage.getItem("powerReports")) || [];
-
-function reportCut() {
-    const area = areaInput.value.trim();
-
-    if (!area) {
-        alert("Please enter your area");
-        return;
-    }
-
-    const avgTime = getAverageTime(area);
-
-    if (avgTime) {
-        alert(`Power usually comes back in about ${avgTime} minutes in ${area}`);
-    }
-
-    reports.push({
-        area: area,
-        status: "❌ Power Cut",
-        time: new Date()
-    });
-
-    updateUI();
+// Capitalize area name properly
+function formatArea(area) {
+  return area
+    .toLowerCase()
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 
-function powerBack() {
-    const area = areaInput.value.trim();
+// Send status
+async function sendStatus(status) {
+  const input = document.getElementById("areaInput");
+  let area = input.value.trim();
 
-    if (!area) {
-        alert("Please enter your area");
-        return;
-    }
+  if (!area) {
+    alert("Enter area name");
+    return;
+  }
 
-    const currentTime = new Date();
-    let message = `✅ Power Restored in ${area}`;
+  area = formatArea(area);
 
-    for (let i = reports.length - 1; i >= 0; i--) {
-        if (reports[i].area === area && reports[i].status === "❌ Power Cut") {
-            const cutTime = new Date(reports[i].time);
-            const duration = Math.floor((currentTime - cutTime) / 60000);
-            message = `✅ Power Restored in ${area} (${duration} mins)`;
-            break;
-        }
-    }
+  await fetch(API + "/update", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ area, status })
+  });
 
-    reports.push({
-        area: area,
-        status: message,
-        time: currentTime
-    });
-
-    updateUI();
+  input.value = "";
+  loadStatus();
 }
 
-function getAverageTime(area) {
-    let total = 0;
-    let count = 0;
+// Load status
+async function loadStatus() {
+  const res = await fetch(API + "/status");
+  const data = await res.json();
 
-    reports.forEach((report) => {
-        if (report.area === area && report.status.includes("Restored")) {
-            const match = report.status.match(/\((\d+) mins\)/);
-            if (match) {
-                total += parseInt(match[1]);
-                count++;
-            }
-        }
-    });
+  const table = document.getElementById("statusTable");
 
-    return count ? Math.floor(total / count) : 0;
+  if (data.length === 0) {
+    table.innerHTML = `<tr><td colspan="3">No reports yet</td></tr>`;
+    return;
+  }
+
+  table.innerHTML = data.map(item => `
+    <tr>
+      <td>${item.area}</td>
+      <td>${item.status}</td>
+      <td>${item.time}</td>
+    </tr>
+  `).join("");
 }
 
-function deleteReport(index) {
-    reports.splice(index, 1);
-    updateUI();
+// Clear all
+async function clearAll() {
+  await fetch(API + "/clear", {
+    method: "DELETE"
+  });
+
+  loadStatus();
 }
 
-function clearAll() {
-    reports = [];
-    updateUI();
-}
+// Auto refresh every 5 sec
+setInterval(loadStatus, 5000);
 
-function updateUI() {
-    localStorage.setItem("powerReports", JSON.stringify(reports));
-    renderReports();
-    updateDashboard();
-    areaInput.value = "";
-}
-
-function renderReports() {
-    reportList.innerHTML = "";
-
-    if (reports.length === 0) {
-        reportList.innerHTML = "<p>No reports available</p>";
-        return;
-    }
-
-    reports.forEach((report, index) => {
-        const card = document.createElement("div");
-        const type = report.status.includes("Cut") ? "cut" : "restored";
-        const avgTime = getAverageTime(report.area);
-
-        card.className = `report-card ${type}`;
-
-        card.innerHTML = `
-            <div>
-                <strong>${report.status}</strong><br>
-                <small>${new Date(report.time).toLocaleString()}</small><br>
-                ${avgTime ? `<small>Avg restore: ${avgTime} mins</small>` : ""}
-            </div>
-            <button class="delete-btn" onclick="deleteReport(${index})">Delete</button>
-        `;
-
-        reportList.appendChild(card);
-    });
-}
-
-function updateDashboard() {
-    const totalReports = reports.length;
-
-    let activeCuts = 0;
-    let totalTime = 0;
-    let count = 0;
-
-    reports.forEach((report) => {
-        if (report.status.includes("Cut")) {
-            activeCuts++;
-        }
-
-        if (report.status.includes("Restored")) {
-            const match = report.status.match(/\((\d+) mins\)/);
-            if (match) {
-                totalTime += parseInt(match[1]);
-                count++;
-            }
-        }
-    });
-
-    const avg = count ? Math.floor(totalTime / count) : 0;
-
-    document.getElementById("totalReports").textContent = totalReports;
-    document.getElementById("activeCuts").textContent = activeCuts;
-    document.getElementById("avgTime").textContent = avg + " mins";
-}
-
-renderReports();
-updateDashboard();
+// Initial load
+loadStatus();
