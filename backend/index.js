@@ -1,20 +1,15 @@
-// Import required modules
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
 
-// Create app
 const app = express();
 const PORT = 5000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// File path
 const FILE = __dirname + "/data.json";
 
-// Read data from file
 function readData() {
   try {
     const data = fs.readFileSync(FILE);
@@ -24,12 +19,10 @@ function readData() {
   }
 }
 
-// Write data to file
 function writeData(data) {
   fs.writeFileSync(FILE, JSON.stringify(data, null, 2));
 }
 
-// 👉 Get latest status (only latest per area)
 app.get("/status", (req, res) => {
   const data = readData();
 
@@ -44,7 +37,6 @@ app.get("/status", (req, res) => {
   res.json(Object.values(latest));
 });
 
-// 👉 Add new update
 app.post("/update", (req, res) => {
   const { area, status } = req.body;
 
@@ -66,13 +58,11 @@ app.post("/update", (req, res) => {
   res.json({ message: "Update added successfully" });
 });
 
-// 👉 Clear all data
 app.delete("/clear", (req, res) => {
   writeData([]);
   res.json({ message: "All data cleared" });
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`⚡ Server running at http://localhost:${PORT}`);
 });

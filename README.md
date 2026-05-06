@@ -1,52 +1,55 @@
-# PowerPulse
+# Power Pulse – Power Cut Alert System
 
 ## Overview
-PowerCut Alert System is a simple and practical web application built to help users report and track power cuts in their area. It allows users to update when electricity goes off and when it comes back, while also showing how long the outage lasted. Based on previous data, the system also gives an estimate of the average time it usually takes for power to be restored.
+Power Pulse is a simple and practical web application designed to help users report and track power outages in different areas.  
+The goal of this project is to provide a clear and quick way for people to stay informed about power cuts and restoration updates in their locality.
 
+---
 
-## Features
-- Report power cuts easily by entering your area  
-- Update when power is restored  
-- Automatically calculate the duration of each power cut  
-- Show an estimated average restoration time based on past records  
-- Display all updates in a clean and structured format  
-- Dashboard showing total reports, active cuts, and average restore time  
-- Delete individual reports or clear all data  
-- Store data using localStorage so it remains even after refreshing  
+## Key Features
+- Report power outages instantly  
+- Update power restoration status  
+- View area-wise power status  
+- Automatic timestamp for every update  
+- Clean and user-friendly interface  
+- Backend data storage for persistence  
 
+---
 
-## Tech Stack
-- HTML for structuring the application  
-- CSS for designing and layout  
-- JavaScript for handling logic and interactions  
-- localStorage for storing data in the browser  
+## Technologies Used
+**Frontend**
+- HTML  
+- CSS  
+- JavaScript  
 
+**Backend**
+- Node.js  
+- Express.js  
 
-## 📷 How It Works
-1. Enter your area name  
-2. Click on "Report Cut" when the power goes off  
-3. Click on "Power Restored" when electricity comes back  
-4. The system calculates the time taken automatically  
-5. It also shows an average restoration time based on previous records  
-6. All updates are displayed and saved for future use  
+**Data Storage**
+- JSON (for storing status updates)
 
+---
 
-## Future Improvements
-- Add automatic location detection  
-- Improve notification system for better user experience  
-- Show detailed area-wise analytics  
-- Integrate backend with database support  
-- Make the application fully responsive for mobile devices  
+## Project Structure
+powercut-alert-system/
 
+├── frontend/  
+│   ├── index.html  
+│   ├── style.css  
+│   └── script.js  
 
-## Live Demo
-Will be added after deployment  
+├── backend/  
+│   ├── index.js  
+│   └── data.json  
 
+├── package.json  
+└── README.md  
 
-## Author
-Yashashwini  
-B.Tech Student | Aspiring Web Developer  
+---
 
+## How to Run the Project
 
-## Motivation
-This project was created to solve a common real-world issue. Power cuts are frequent, and people often do not have clear information about when electricity will be restored. This application provides a simple way to track outages and gives users a rough estimate based on previous data, making it more useful in daily life.
+1. Clone the repository  
+   ```bash
+   git clone https://github.com/your-username/powerpulse.git

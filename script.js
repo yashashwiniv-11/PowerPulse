@@ -1,6 +1,4 @@
 const API = "http://localhost:5000";
-
-// Capitalize area name properly
 function formatArea(area) {
   return area
     .toLowerCase()
@@ -9,7 +7,6 @@ function formatArea(area) {
     .join(" ");
 }
 
-// Send status
 async function sendStatus(status) {
   const input = document.getElementById("areaInput");
   let area = input.value.trim();
@@ -33,7 +30,6 @@ async function sendStatus(status) {
   loadStatus();
 }
 
-// Load status
 async function loadStatus() {
   const res = await fetch(API + "/status");
   const data = await res.json();
@@ -54,7 +50,6 @@ async function loadStatus() {
   `).join("");
 }
 
-// Clear all
 async function clearAll() {
   await fetch(API + "/clear", {
     method: "DELETE"
@@ -63,8 +58,6 @@ async function clearAll() {
   loadStatus();
 }
 
-// Auto refresh every 5 sec
 setInterval(loadStatus, 5000);
 
-// Initial load
 loadStatus();
