@@ -1,53 +1,124 @@
 body {
   font-family: Arial;
-  text-align: center;
   background: #0f172a;
   color: white;
-}
-
-h1 {
-  margin-top: 20px;
+  margin: 0;
+  padding: 20px;
 }
 
 .container {
-  margin: 20px auto;
-  width: 80%;
+  max-width: 1100px;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.top-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 input {
-  padding: 10px;
-  width: 250px;
-  margin-bottom: 10px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  flex: 1;
 }
 
-.buttons button {
-  padding: 10px 15px;
-  margin: 5px;
+button {
+  padding: 12px 18px;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
-  color: white;
-  border-radius: 5px;
+  font-weight: bold;
 }
 
 .cut {
   background: red;
+  color: white;
 }
 
 .restore {
   background: green;
+  color: white;
 }
 
-.clear {
-  background: gray;
+.logout {
+  background: orange;
+  color: white;
+}
+
+.delete {
+  background: crimson;
+  color: white;
 }
 
 table {
   width: 100%;
   margin-top: 20px;
   border-collapse: collapse;
+  background: white;
+  color: black;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-th, td {
-  padding: 10px;
-  border: 1px solid white;
+th {
+  background: #1e293b;
+  color: white;
+}
+
+th,
+td {
+  padding: 14px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #22c55e;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  animation: fade 0.5s;
+}
+
+.login-box {
+  width: 320px;
+  margin: 100px auto;
+  background: white;
+  color: black;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.login-box input {
+  width: 90%;
+  margin: 10px 0;
+}
+
+.login-box button {
+  width: 100%;
+  background: #2563eb;
+  color: white;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
