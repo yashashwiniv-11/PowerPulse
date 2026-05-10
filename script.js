@@ -1,198 +1,98 @@
-const API = "http://localhost:5000";
+const API_URL = "http://localhost:5000";
 
-if (!localStorage.getItem("token")) {
+// Check login
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+if (!currentUser) {
   window.location.href = "login.html";
 }
 
-const socket = io(API);
-
-const areaInput =
-  document.getElementById("areaInput");
-
-const tableBody =
-  document.getElementById("tableBody");
-
-async function fetchStatus() {
-  const res = await fetch(
-    `${API}/status`
-  );
-
-  const data = await res.json();
-
-  displayData(data);
+// Show username
+const userNameElement = document.getElementById("userName");
+if (userNameElement) {
+  userNameElement.textContent = `Welcome, ${currentUser.name}`;
 }
 
-function displayData(data) {
-  tableBody.innerHTML = "";
+// Load reports when page opens
+loadReports();
 
-  const latest = {};
-
-  data.forEach((item, index) => {
-    latest[item.area.toLowerCase()] = {
-      ...item,
-      index,
-    };
-  });
-
-  if (
-    Object.values(latest).length === 0
-  ) {
-    tableBody.innerHTML = `
-      <tr>
-        <td colspan="4">
-          No reports available
-        </td>
-      </tr>
-    `;
-
-    return;
-  }
-
-  Object.values(latest).forEach(
-    (item) => {
-      const row = `
-        <tr>
-          <td>${item.area}</td>
-
-          <td>
-            ${item.status}
-          </td>
-
-          <td>
-            ${item.time}
-          </td>
-
-          <td>
-            <button
-              class="delete"
-              onclick="deleteReport(${item.index})"
-            >
-              Delete
-            </button>
-          </td>
-        </tr>
-      `;
-
-      tableBody.innerHTML += row;
-    }
-  );
-}
-
-async function updatePower(status) {
-  const area =
-    areaInput.value.trim();
+async function reportStatus(status) {
+  const areaInput = document.getElementById("areaInput");
+  const area = areaInput.value.trim();
 
   if (!area) {
-    alert("Enter area name");
+    alert("Please enter an area name.");
     return;
   }
 
-  await fetch(`${API}/update`, {
-    method: "POST",
-
-    headers: {
-      "Content-Type":
-        "application/json",
-
-      Authorization:
-        localStorage.getItem(
-          "token"
-        ),
-    },
-
-    body: JSON.stringify({
-      area,
-      status,
-    }),
-  });
-
-  areaInput.value = "";
-}
-
-async function deleteReport(index) {
-  await fetch(
-    `${API}/delete/${index}`,
-    {
-      method: "DELETE",
-
+  try {
+    await fetch(`${API_URL}/update`, {
+      method: "POST",
       headers: {
-        Authorization:
-          localStorage.getItem(
-            "token"
-          ),
+        "Content-Type": "application/json"
       },
-    }
-  );
+      body: JSON.stringify({ area, status })
+    });
 
-  fetchStatus();
+    areaInput.value = "";
+    loadReports();
+  } catch (error) {
+    alert("Failed to submit report.");
+  }
 }
 
-socket.on(
-  "power-update",
-  () => {
-    fetchStatus();
+async function loadReports() {
+  const tableBody = document.getElementById("reportTableBody");
 
-    showNotification(
-      "⚡ Live Update Received"
-    );
+  try {
+    const response = await fetch(`${API_URL}/status`);
+    const reports = await response.json();
+
+    if (reports.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="3">No reports yet.</td>
+        </tr>
+      `;
+      return;
+    }
+
+    tableBody.innerHTML = reports
+      .map(
+        (report) => `
+          <tr>
+            <td>${report.area}</td>
+            <td>${report.status}</td>
+            <td>${new Date(report.time).toLocaleString()}</td>
+          </tr>
+        `
+      )
+      .join("");
+  } catch (error) {
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="3">Unable to load reports.</td>
+      </tr>
+    `;
   }
-);
+}
 
-socket.on(
-  "data-deleted",
-  () => {
-    fetchStatus();
+async function clearReports() {
+  const confirmClear = confirm("Are you sure you want to delete all reports?");
+  if (!confirmClear) return;
+
+  try {
+    await fetch(`${API_URL}/clear`, {
+      method: "DELETE"
+    });
+
+    loadReports();
+  } catch (error) {
+    alert("Failed to clear reports.");
   }
-);
-
-function showNotification(message) {
-  const note =
-    document.createElement("div");
-
-  note.className =
-    "notification";
-
-  note.innerText = message;
-
-  document.body.appendChild(note);
-
-  setTimeout(() => {
-    note.remove();
-  }, 3000);
 }
 
 function logout() {
-  localStorage.removeItem(
-    "token"
-  );
-
-  window.location.href =
-    "login.html";
+  localStorage.removeItem("currentUser");
+  window.location.href = "login.html";
 }
-
-document
-  .getElementById("searchInput")
-  .addEventListener(
-    "input",
-    function () {
-      const value =
-        this.value.toLowerCase();
-
-      const rows =
-        document.querySelectorAll(
-          "tbody tr"
-        );
-
-      rows.forEach((row) => {
-        const area =
-          row.children[0].innerText.toLowerCase();
-
-        row.style.display =
-          area.includes(value)
-            ? ""
-            : "none";
-      });
-    }
-  );
-
-fetchStatus();

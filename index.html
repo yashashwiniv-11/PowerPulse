@@ -1,81 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PowerPulse</title>
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  />
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+  <header class="top-bar">
+    <h1>PowerPulse</h1>
+    <div class="user-section">
+      <span id="userName"></span>
+      <button class="btn logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </header>
 
-<div class="container">
+  <main class="container">
+    <div class="card">
+      <h2>Report Power Status</h2>
 
-  <h1>⚡ PowerPulse</h1>
+      <input
+        type="text"
+        id="areaInput"
+        placeholder="Enter area name"
+      />
 
-  <div class="top-bar">
+      <div class="button-group">
+        <button class="btn cut-btn" onclick="reportStatus('Power Cut')">
+          Power Cut
+        </button>
 
-    <input
-      type="text"
-      id="areaInput"
-      placeholder="Enter Area Name"
-    />
+        <button class="btn restore-btn" onclick="reportStatus('Power Restored')">
+          Power Restored
+        </button>
 
-    <button
-      class="cut"
-      onclick="updatePower('Power Cut')"
-    >
-      Power Cut
-    </button>
+        <button class="btn clear-btn" onclick="clearReports()">
+          Clear All
+        </button>
+      </div>
+    </div>
 
-    <button
-      class="restore"
-      onclick="updatePower('Power Restored')"
-    >
-      Power Restored
-    </button>
+    <div class="card">
+      <h2>Live Reports</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Area</th>
+            <th>Status</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody id="reportTableBody">
+          <tr>
+            <td colspan="3">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
 
-    <button
-      class="logout"
-      onclick="logout()"
-    >
-      Logout
-    </button>
-
-  </div>
-
-  <br>
-
-  <input
-    type="text"
-    id="searchInput"
-    placeholder="Search Area..."
-  />
-
-  <table>
-
-    <thead>
-      <tr>
-        <th>Area</th>
-        <th>Status</th>
-        <th>Time</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-
-    <tbody id="tableBody">
-
-    </tbody>
-
-  </table>
-
-</div>
-
-<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-
-<script src="script.js"></script>
-
+  <script src="script.js"></script>
 </body>
 </html>

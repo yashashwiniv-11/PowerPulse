@@ -1,124 +1,139 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+}
+
+/* Top Bar */
+.top-bar {
   background: #0f172a;
   color: white;
-  margin: 0;
-  padding: 20px;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
+.user-section {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Layout */
 .container {
-  max-width: 1100px;
-  margin: auto;
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 0 20px;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
+.card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 24px;
 }
 
-.top-bar {
+/* Inputs */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+/* Buttons */
+.button-group {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-input {
+.btn {
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cut-btn {
+  background: #dc2626;
+}
+
+.restore-btn {
+  background: #16a34a;
+}
+
+.clear-btn {
+  background: #64748b;
+}
+
+.logout-btn {
+  background: #2563eb;
+}
+
+.auth-card button {
+  width: 100%;
+  background: #2563eb;
   padding: 12px;
   border: none;
   border-radius: 8px;
-  flex: 1;
-}
-
-button {
-  padding: 12px 18px;
-  border: none;
-  border-radius: 8px;
+  color: white;
   cursor: pointer;
-  font-weight: bold;
 }
 
-.cut {
-  background: red;
-  color: white;
-}
-
-.restore {
-  background: green;
-  color: white;
-}
-
-.logout {
-  background: orange;
-  color: white;
-}
-
-.delete {
-  background: crimson;
-  color: white;
-}
-
+/* Table */
 table {
   width: 100%;
-  margin-top: 20px;
   border-collapse: collapse;
-  background: white;
-  color: black;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-th {
-  background: #1e293b;
-  color: white;
 }
 
 th,
 td {
-  padding: 14px;
-  border: 1px solid #ddd;
-  text-align: center;
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: left;
 }
 
-.notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: #22c55e;
-  color: white;
-  padding: 15px 20px;
-  border-radius: 10px;
-  animation: fade 0.5s;
+/* Auth Pages */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f172a, #2563eb);
+  padding: 20px;
 }
 
-.login-box {
-  width: 320px;
-  margin: 100px auto;
+.auth-card {
   background: white;
-  color: black;
-  padding: 30px;
-  border-radius: 12px;
+  padding: 36px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
   text-align: center;
 }
 
-.login-box input {
-  width: 90%;
-  margin: 10px 0;
+.auth-link {
+  margin-top: 18px;
 }
 
-.login-box button {
-  width: 100%;
-  background: #2563eb;
-  color: white;
+.auth-link a {
+  color: #2563eb;
+  text-decoration: none;
 }
 
-@keyframes fade {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+#message {
+  margin-top: 12px;
+  font-weight: bold;
 }

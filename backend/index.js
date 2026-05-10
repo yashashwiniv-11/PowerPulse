@@ -1,142 +1,138 @@
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
-const http = require("http");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const { Server } = require("socket.io");
+const path = require("path");
 
 const app = express();
-const server = http.createServer(app);
-
-const io = new Server(server, {
-  cors: {
-    origin: "*",
-  },
-});
-
 const PORT = 5000;
+
+const DATA_FILE = path.join(__dirname, "data.json");
+const USERS_FILE = path.join(__dirname, "users.json");
 
 app.use(cors());
 app.use(express.json());
 
-const FILE = __dirname + "/data.json";
-
-const SECRET = "powerpulse_secret_key";
-
-const admin = {
-  username: "admin",
-  password: bcrypt.hashSync("admin123", 8),
-};
-
-function readData() {
-  try {
-    const data = fs.readFileSync(FILE);
-    return JSON.parse(data);
-  } catch {
-    return [];
+function readJSON(filePath) {
+  if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, "[]");
   }
+
+  const content = fs.readFileSync(filePath, "utf8");
+  return JSON.parse(content || "[]");
 }
 
-function writeData(data) {
-  fs.writeFileSync(FILE, JSON.stringify(data, null, 2));
+function writeJSON(filePath, data) {
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 }
 
-function verifyToken(req, res, next) {
-  const token = req.headers.authorization;
-
-  if (!token) {
-    return res.status(403).json({
-      message: "Token required",
-    });
-  }
-
-  try {
-    jwt.verify(token, SECRET);
-    next();
-  } catch {
-    res.status(401).json({
-      message: "Invalid token",
-    });
-  }
-}
-
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-
-  if (
-    username !== admin.username ||
-    !bcrypt.compareSync(password, admin.password)
-  ) {
-    return res.status(401).json({
-      message: "Invalid credentials",
-    });
-  }
-
-  const token = jwt.sign(
-    { username },
-    SECRET,
-    { expiresIn: "1h" }
-  );
-
-  res.json({
-    token,
-  });
-});
-
+// Get reports
 app.get("/status", (req, res) => {
-  res.json(readData());
+  res.json(readJSON(DATA_FILE));
 });
 
-app.post("/update", verifyToken, (req, res) => {
+// Add report
+app.post("/update", (req, res) => {
   const { area, status } = req.body;
 
-  const newEntry = {
+  if (!area || !status) {
+    return res.status(400).json({
+      message: "Area and status are required"
+    });
+  }
+
+  const reports = readJSON(DATA_FILE);
+
+  reports.unshift({
     area:
-      area.charAt(0).toUpperCase() +
-      area.slice(1).toLowerCase(),
-
+      area
+        .trim()
+        .toLowerCase()
+        .replace(/\b\w/g, (char) => char.toUpperCase()),
     status,
-    time: new Date().toLocaleString(),
-  };
+    time: new Date().toISOString()
+  });
 
-  let data = readData();
-
-  data.unshift(newEntry);
-
-  writeData(data);
-
-  io.emit("power-update", newEntry);
+  writeJSON(DATA_FILE, reports);
 
   res.json({
-    message: "Updated successfully",
+    message: "Report submitted successfully"
   });
 });
 
-app.delete(
-  "/delete/:index",
-  verifyToken,
-  (req, res) => {
-    let data = readData();
+// Clear reports
+app.delete("/clear", (req, res) => {
+  writeJSON(DATA_FILE, []);
 
-    data.splice(req.params.index, 1);
-
-    writeData(data);
-
-    io.emit("data-deleted");
-
-    res.json({
-      message: "Deleted",
-    });
-  }
-);
-
-io.on("connection", (socket) => {
-  console.log("⚡ User Connected");
+  res.json({
+    message: "All reports cleared"
+  });
 });
 
-server.listen(PORT, () => {
-  console.log(
-    `Server running on http://localhost:${PORT}`
+// Register
+app.post("/register", (req, res) => {
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({
+      message: "All fields are required"
+    });
+  }
+
+  const users = readJSON(USERS_FILE);
+
+  const existingUser = users.find(
+    (user) => user.email === email.toLowerCase()
   );
+
+  if (existingUser) {
+    return res.status(409).json({
+      message: "User already exists"
+    });
+  }
+
+  users.push({
+    id: Date.now(),
+    name,
+    email: email.toLowerCase(),
+    password,
+    createdAt: new Date().toISOString()
+  });
+
+  writeJSON(USERS_FILE, users);
+
+  res.status(201).json({
+    message: "Registration successful"
+  });
+});
+
+// Login
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  const users = readJSON(USERS_FILE);
+
+  const user = users.find(
+    (u) =>
+      u.email === email.toLowerCase() &&
+      u.password === password
+  );
+
+  if (!user) {
+    return res.status(401).json({
+      message: "Invalid email or password"
+    });
+  }
+
+  res.json({
+    message: "Login successful",
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email
+    }
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });

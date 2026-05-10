@@ -1,0 +1,14 @@
+[
+  {
+    "username": "admin",
+    "password": "admin123",
+    "role": "admin"
+  },
+  {
+    "id": 1778403245394,
+    "name": "Yashu",
+    "email": "admin@gmail.com",
+    "password": "121212",
+    "createdAt": "2026-05-10T08:54:05.394Z"
+  }
+]

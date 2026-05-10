@@ -3,26 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login | PowerPulse</title>
+  <title>Register | PowerPulse</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="auth-container">
     <div class="auth-card">
       <h1>PowerPulse</h1>
-      <h2>Login</h2>
+      <h2>Create Account</h2>
 
-      <form id="loginForm">
+      <form id="registerForm">
+        <input type="text" id="name" placeholder="Full Name" required />
         <input type="email" id="email" placeholder="Email Address" required />
-        <input type="password" id="password" placeholder="Password" required />
-        <button type="submit">Login</button>
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          minlength="6"
+          required
+        />
+        <button type="submit">Register</button>
       </form>
 
       <p id="message"></p>
 
       <p class="auth-link">
-        Don't have an account?
-        <a href="register.html">Register</a>
+        Already have an account?
+        <a href="login.html">Login</a>
       </p>
     </div>
   </div>
